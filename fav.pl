@@ -11,7 +11,6 @@ my $consumer_key ="***";
 my $consumer_secret = "***";
 
 my $nt = Net::Twitter::Lite::WithAPIv1_1->new(
-
 	consumer_key => $consumer_key,
 	consumer_secret => $consumer_secret
 );
@@ -52,7 +51,6 @@ get '/auth' => sub {
 get '/logout' => sub {
 	my $self = shift;
 	$self->session( expires => 1 );
-	#$self->render;
 } => 'logout';
 
 get '/' => sub {
@@ -61,7 +59,7 @@ get '/' => sub {
 	my $access_token_secret = $self->session( 'access_token_secret' ) || '';
 	my $screen_name = $self->session( 'screen_name' ) || '';
 
-	# セッションにaccess_token/access_token_secretが残ってなければ認証処理へ
+	#認証処理
 	return $self->redirect_to( 'auth' ) unless ($access_token && $access_token_secret);
 
 } => 'index';
@@ -75,7 +73,7 @@ post '/fav' => sub {
 	my $access_token_secret = $self->session( 'access_token_secret' ) || '';
 	my $screen_name = $self->session( 'screen_name' ) || '';
 
-	# セッションにaccess_token/access_token_secretが残ってなければ認証処理へ
+	# 認証処理
 	return  $self->render_json({'error' => "Not Authorized"}) unless ($access_token && $access_token_secret);
 
 	$nt->access_token( $access_token );
@@ -143,6 +141,6 @@ post '/fav' => sub {
 
 } => 'fav';
 
-app->secret("morimoriunco"); # セッション管理のために付けておく
+app->secret("***"); # セッション管理のために付けておく
 app->start;
 
